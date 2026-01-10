@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: renewhub-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: renewhub
+    ports:
+      - "5432:5432"
+    volumes:
+      - renewhub_data:/var/lib/postgresql/data
+
+volumes:
+  renewhub_data:

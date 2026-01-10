@@ -1,0 +1,29 @@
+```markdown
+renew-hub/
+  app/
+    __init__.py
+    config.py
+    models.py
+    api/
+      __init__.py
+      assets.py
+      metrics.py
+    ui/
+      __init__.py
+      routes.py
+      templates/
+      static/
+  etl/
+    __init__.py
+    s3_client.py
+    parser.py
+    loader.py
+    run_etl.py
+  infra/
+    Pulumi.yaml
+    __main__.py
+  tests/
+  scripts/
+  requirements.txt
+  README.md
+  ```
