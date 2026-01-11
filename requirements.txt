@@ -3,3 +3,5 @@ Flask-SQLAlchemy
 psycopg2-binary
 boto3
 python-dotenv
+flask-smorest 
+marshmallow
