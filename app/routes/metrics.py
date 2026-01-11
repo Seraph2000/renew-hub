@@ -1,5 +1,6 @@
 from datetime import datetime
-from flask import Blueprint, request, jsonify
+from flask import request
+from flask_smorest import Blueprint
 
 from app.utils.validation import ValidationError, validate_payload
 from app.utils.query import parse_query_params
@@ -9,7 +10,7 @@ from app.models import db, DailyMetric
 from app.schemas.metric import DailyMetricSchema
 
 
-metrics_bp = Blueprint("metrics", __name__)
+metrics_bp = Blueprint("metrics", __name__, url_prefix="/metrics")
 
 
 # -----------------------------
@@ -25,11 +26,6 @@ def parse_date(value):
 # -----------------------------
 # Routes
 # -----------------------------
-@metrics_bp.get("/asset/<int:asset_id>")
-def metrics_for_asset(asset_id):
-    metrics = DailyMetric.query.filter_by(asset_id=asset_id).all()
-    return jsonify([m.to_dict() for m in metrics])
-
 
 @metrics_bp.get("/")
 def list_metrics():
@@ -58,32 +54,9 @@ def list_metrics():
     if "end" in filters:
         query = query.filter(DailyMetric.date <= filters["end"])
 
-
-    if asset_id:
-        try:
-            asset_id = int(asset_id)
-        except ValueError:
-            raise ValidationError("asset_id must be an integer")
-        query = query.filter(DailyMetric.asset_id == asset_id)
-
-    if site_id:
-        try:
-            site_id = int(site_id)
-        except ValueError:
-            raise ValidationError("site_id must be an integer")
-        query = query.join(DailyMetric.asset).filter_by(site_id=site_id)
-
-    if start:
-        start = parse_date(start)
-        query = query.filter(DailyMetric.date >= start)
-
-    if end:
-        end = parse_date(end)
-        query = query.filter(DailyMetric.date <= end)
-
     # --- Pagination ---
     page = filters.get("page", 1)
-    limit = filters.get("limit", 50)pi-p 
+    limit = filters.get("limit", 50)
 
     metrics = query.paginate(page=page, per_page=limit, error_out=False)
 

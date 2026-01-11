@@ -1,11 +1,13 @@
-from flask import Blueprint, request, jsonify
+from flask import request
+from flask_smorest import Blueprint
 from app.models import db, DailyMetric
 from datetime import datetime
 
 from app.utils.validation import validate_payload, ValidationError
 
 
-etl_bp = Blueprint("etl", __name__)
+etl_bp = Blueprint("etl", __name__, url_prefix="/etl")
+
 
 @etl_bp.post("/ingest")
 def ingest_metric():

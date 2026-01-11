@@ -14,25 +14,12 @@ db = SQLAlchemy()
 
 def create_app():
     load_dotenv()
-    app = Api(app)
+    app = Flask(__name__)
 
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    db.init_app(app)
-
-    # Register blueprints
-    from app.routes.sites import sites_bp
-    from app.routes.assets import assets_bp
-    from app.routes.metrics import metrics_bp
-    from app.routes.etl import etl_bp
-
-    app.register_blueprint(sites_bp)
-    app.register_blueprint(assets_bp)
-    app.register_blueprint(metrics_bp)
-    app.register_blueprint(etl_bp)
-
-    # configure OpenAPI
+    # OpenAPI / Swagger config
     app.config["API_TITLE"] = "RenewHub API"
     app.config["API_VERSION"] = "v1"
     app.config["OPENAPI_VERSION"] = "3.0.3"
@@ -41,6 +28,25 @@ def create_app():
     app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
     app.config["OPENAPI_REDOC_PATH"] = "/redoc"
     app.config["OPENAPI_REDOC_URL"] = "https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"
+
+    db.init_app(app)
+
+    # Create the Smorest API wrapper
+    api = Api(app)
+
+    # Register blueprints
+    from app.routes.sites import sites_bp
+    from app.routes.assets import assets_bp
+    from app.routes.metrics import metrics_bp
+    from app.routes.etl import etl_bp
+
+
+    # Register blueprints on the API wrapper
+    
+    api.register_blueprint(sites_bp)
+    api.register_blueprint(assets_bp)
+    api.register_blueprint(metrics_bp)
+    api.register_blueprint(etl_bp)
 
     @app.route("/health")
     def health():
