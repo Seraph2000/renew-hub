@@ -3,3 +3,7 @@ __pycache__/
 
 # python virtual environemnt
 .hub_env/
+*.env/
+
+# local files
+.env

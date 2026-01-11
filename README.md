@@ -1,29 +1,38 @@
-```markdown
-renew-hub/
-  app/
-    __init__.py
-    config.py
-    models.py
-    api/
-      __init__.py
-      assets.py
-      metrics.py
-    ui/
-      __init__.py
-      routes.py
-      templates/
-      static/
-  etl/
-    __init__.py
-    s3_client.py
-    parser.py
-    loader.py
-    run_etl.py
-  infra/
-    Pulumi.yaml
-    __main__.py
-  tests/
-  scripts/
-  requirements.txt
-  README.md
-  ```
+# Renew Hub Backend
+
+A Flask + Postgres backend for renewable energy assets, daily metrics, and ETL ingestion.
+
+## Features
+- Flask API with modular blueprints
+- Postgres database with SQLAlchemy models
+- Seed pipeline for sites, assets, and daily metrics
+- ETL ingestion endpoint
+- Filtering, pagination, and nested routes
+
+## Endpoints
+
+### Sites
+- `GET /sites/`
+- `GET /sites/<id>`
+- `GET /sites/<id>/assets`
+
+### Assets
+- `GET /assets/`
+- `GET /assets/<id>`
+
+### Metrics
+- `GET /metrics/`
+  - filters: `asset_id`, `site_id`, `start`, `end`
+  - pagination: `page`, `limit`
+- `GET /metrics/asset/<id>`
+- `POST /etl/ingest`
+
+## Running Locally
+
+`flask run`
+
+## Seeding the Database
+
+`python scripts/create_db.py python -m scripts.seed_data`
+
+

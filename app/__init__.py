@@ -18,10 +18,12 @@ def create_app():
     from app.routes.sites import sites_bp
     from app.routes.assets import assets_bp
     from app.routes.metrics import metrics_bp
+    from app.routes.etl import etl_bp
 
     app.register_blueprint(sites_bp, url_prefix="/sites")
     app.register_blueprint(assets_bp, url_prefix="/assets")
     app.register_blueprint(metrics_bp, url_prefix="/metrics")
+    app.register_blueprint(etl_bp, url_prefix="/etl")
 
     @app.route("/health")
     def health():
